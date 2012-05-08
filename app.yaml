@@ -1,0 +1,20 @@
+application: helloworld
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+- url: /stylesheets
+  static_dir: stylesheets
+# - url: /oauth2callback
+#   script: oauth2client/appengine.py
+- url: /.*
+  script: img_gallery.app
+
+libraries:
+- name: jinja2
+  version: latest
+
+

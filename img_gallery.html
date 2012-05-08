@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+
+    <script type="text/javascript">
+    function grayscaleImage(imgObj)
+    {
+        var canvas = document.createElement('canvas');
+        var canvasContext = canvas.getContext('2d');
+        
+        var imgW = imgObj.width;
+        var imgH = imgObj.height;
+        canvas.width = imgW;
+        canvas.height = imgH;
+        
+        canvasContext.drawImage(imgObj, 0, 0);
+        var imgPixels = canvasContext.getImageData(0, 0, imgW, imgH);
+        
+        for(var y = 0; y < imgPixels.height; y++){
+            for(var x = 0; x < imgPixels.width; x++){
+                var i = (y * 4) * imgPixels.width + x * 4;
+                var avg = (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3;
+                imgPixels.data[i] = avg; 
+                imgPixels.data[i + 1] = avg; 
+                imgPixels.data[i + 2] = avg;
+            }
+        }
+        
+        canvasContext.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+        return canvas.toDataURL();
+    };
+
+function toggle(it) {
+  document.getElementById("big_picture").src = it.src;
+  it.src = grayscaleImage(it);
+  
+
+}
+        
+
+
+
+</script>
+  </head>
+<body onload ="resize();">
+<div id="container">
+<p> {{ greeting }} </p>
+<br>
+
+<h1>Photo Gallery</h1>
+<div id = "main_picture"> <img id = "big_picture"></img></div>
+<div id="picture_section">
+	<div id="inside">
+	{% for picture in pictures %}
+	
+		<img src='img?img_id={{ picture.key() }}' onclick="toggle(this);"/>
+	{% endfor %}
+	</div>
+
+</div>
+<form action="/sign" enctype="multipart/form-data" method="post">
+	<div><input type="file" name="img"/></div>
+	<div><input type="submit" value="Upload image" /></div>
+</form>
+<br/>
+
+
+
+</div>
+</body>
+
+</html>
