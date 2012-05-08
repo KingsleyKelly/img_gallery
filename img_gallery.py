@@ -18,7 +18,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 
 class Picture(db.Model):
-    """Models a Gallery with an author, content, and date."""
+    """Models a Gallery with an author, content ( the picture ), and date."""
     author = db.UserProperty()
     content = db.BlobProperty()
     date = db.DateTimeProperty(auto_now_add=True)
@@ -33,7 +33,7 @@ class Image(webapp.RequestHandler):
             self.response.out.write("No image")
 
 def gallery_key(gallery_name=None):
-    """Constructs a Datastore key for a Guestbook entity with guestbook_name."""
+    """Constructs a Datastore key for a gallery with a gallery name."""
     return db.Key.from_path('Gallery', gallery_name or 'default_gallery')
 
 
@@ -66,6 +66,7 @@ class MainPage(webapp2.RequestHandler):
 
 
 class Gallery(webapp2.RequestHandler):
+    """Main gallery class, creates pictures and adds them to galleries"""
     def post(self):
         
         gallery_name = self.request.get('gallery_name')
